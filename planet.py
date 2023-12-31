@@ -6,8 +6,6 @@ import math
 densityConstant = 10
 gravityConstant = 160
 
-colorOptions = ["green", "blue", "yellow", "red", "purple", "orange", "white"]
-
 
 class Planet(pygame.sprite.Sprite):
     def __init__(self, mass, color=None, x=0, y=0, xVel=0, yVel=0):
@@ -22,7 +20,9 @@ class Planet(pygame.sprite.Sprite):
         self.image = pygame.Surface((self.radius * 2, self.radius * 2), pygame.SRCALPHA)
         self.image.fill((0, 0, 0, 0))  # Fill with transparent color
         if color == None:
-            self.color = random.choice(colorOptions)
+            self.color = "#" + "".join(
+                random.choice("0123456789ABCDEF") for j in range(6)
+            )
         else:
             self.color = color
         pygame.draw.circle(

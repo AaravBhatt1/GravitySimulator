@@ -13,8 +13,9 @@ screen = pygame.display.set_mode((screenWidth, screenHeight))
 
 # Set FPS
 FPS = 50
+
 # Set game title
-pygame.display.set_caption("My Pygame Game")
+pygame.display.set_caption("Gravity Simulator")
 
 # Set up game clock
 clock = pygame.time.Clock()
@@ -43,14 +44,20 @@ with open(planetFilePath, "r") as file:
 
 # Main game loop
 running = True
+paused = False
 
 while running:
     # Handle events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                paused = not paused
 
     # Game logic
+    if paused:
+        continue
     # Adds Gravity
     for planet in planetGroup:
         planet.adjustAcceleration(planetGroup)
