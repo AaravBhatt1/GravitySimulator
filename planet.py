@@ -22,7 +22,7 @@ class Planet(pygame.sprite.Sprite):
         if color == None:
             self.color = "#" + "".join(
                 random.choice("0123456789ABCDEF") for j in range(6)
-            )
+            )  # Todo: make sure it is not black
         else:
             self.color = color
         pygame.draw.circle(
