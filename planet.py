@@ -66,7 +66,3 @@ class Planet(pygame.sprite.Sprite):
 
         self.xAcc = xForce / self.mass
         self.yAcc = yForce / self.mass
-
-    def shift(self, centX, centY, screenWidth, screenHeight):
-        self.rect.centerx = self.rect.centerx - centX + screenWidth // 2
-        self.rect.centery = self.rect.centery - centY + screenHeight // 2
