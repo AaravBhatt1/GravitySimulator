@@ -1,5 +1,7 @@
 import pygame
-from object import Object
+from planet import Planet
+import sys
+import json
 
 # Initialize Pygame
 pygame.init()
@@ -20,49 +22,24 @@ clock = pygame.time.Clock()
 # Physics constants
 elasticity = 0.7
 
-# Game variables
-objectGroup = pygame.sprite.Group()
-# This generates the objects
-planet = Object(
-    x=screenWidth // 2,
-    y=screenHeight // 2,
-    mass=200,
-    xVel=0,
-    yVel=0,
-)
-objectGroup.add(planet)
-planet = Object(
-    x=screenWidth // 2 + 150,
-    y=screenHeight // 2,
-    mass=8,
-    xVel=0,
-    yVel=16,
-)
-objectGroup.add(planet)
-planet = Object(
-    x=screenWidth // 2 - 250,
-    y=screenHeight // 2,
-    mass=3.5,
-    xVel=0,
-    yVel=12,
-)
-objectGroup.add(planet)
-planet = Object(
-    x=screenWidth // 2 - 200,
-    y=screenHeight // 2,
-    mass=0.8,
-    xVel=3,
-    yVel=16,
-)
-objectGroup.add(planet)
-planet = Object(
-    x=screenWidth // 2,
-    y=screenHeight // 2 - 200,
-    mass=4,
-    xVel=10,
-    yVel=-3,
-)
-objectGroup.add(planet)
+# This creates a spriteGroup for the planets and generates them from the file
+planetGroup = pygame.sprite.Group()
+# This generates the planets
+# Todo: raise exception arguments do not exist
+planetFilePath = sys.argv[1]
+# Todo: raise exception if file format incorrect
+with open(planetFilePath, "r") as file:
+    planets = json.load(file)["planets"]
+    for planet in planets:
+        planetGroup.add(
+            Planet(
+                x=screenWidth // 2 + planet["xPos"],
+                y=screenHeight // 2 - planet["yPos"],
+                mass=planet["mass"],
+                xVel=planet["xVel"],
+                yVel=-planet["yVel"],
+            )
+        )
 
 # Main game loop
 running = True
@@ -75,40 +52,40 @@ while running:
 
     # Game logic
     # Adds Gravity
-    for object in objectGroup:
-        object.adjustAcceleration(objectGroup)
-    # Makes objects move
-    objectGroup.update()
+    for planet in planetGroup:
+        planet.adjustAcceleration(planetGroup)
+    # Makes planets move
+    planetGroup.update()
     # Deals with collisions
-    for object1 in objectGroup:
-        for object2 in objectGroup:
-            if object1 == object2:
+    for planet1 in planetGroup:
+        for planet2 in planetGroup:
+            if planet1 == planet2:
                 continue
-            if object1.rect.colliderect(object2.rect):
-                # Removes collided objects
-                objectGroup.remove([object1, object2])
+            if planet1.rect.colliderect(planet2.rect):
+                # Removes collided planets
+                planetGroup.remove([planet1, planet2])
 
                 # Adds a new one
-                newMass = object1.mass + object2.mass
+                newMass = planet1.mass + planet2.mass
                 newXVel = (
                     elasticity
-                    * (object1.mass * object1.xVel + object2.mass * object2.xVel)
+                    * (planet1.mass * planet1.xVel + planet2.mass * planet2.xVel)
                     / newMass
                 )
                 newYVel = (
                     elasticity
-                    * (object1.mass * object1.yVel + object2.mass * object2.yVel)
+                    * (planet1.mass * planet1.yVel + planet2.mass * planet2.yVel)
                     / newMass
                 )
-                if object1.mass > object2.mass:
-                    color = object1.color
+                if planet1.mass > planet2.mass:
+                    color = planet1.color
                 else:
-                    color = object2.color
-                objectGroup.add(
-                    Object(
+                    color = planet2.color
+                planetGroup.add(
+                    Planet(
                         mass=newMass,
-                        x=object1.rect.centerx,
-                        y=object1.rect.centery,
+                        x=planet1.rect.centerx,
+                        y=planet1.rect.centery,
                         xVel=newXVel,
                         yVel=newYVel,
                         color=color,
@@ -118,12 +95,12 @@ while running:
     # Draw graphics
     screen.fill("black")  # Fill the screen with black
 
-    # Drawing objects
-    for object in objectGroup:
-        if (-object.radius < object.rect.centerx < screenWidth + object.radius) or (
-            -object.radius < object.rect.centery < screenHeight + object.radius
+    # Drawing planets
+    for planet in planetGroup:
+        if (-planet.radius < planet.rect.centerx < screenWidth + planet.radius) or (
+            -planet.radius < planet.rect.centery < screenHeight + planet.radius
         ):
-            screen.blit(object.image, object.rect)
+            screen.blit(planet.image, planet.rect)
 
     # Update display
     pygame.display.update()

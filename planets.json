@@ -1,0 +1,39 @@
+{
+    "planets" : [
+        {
+            "xPos" : 0,
+            "yPos" : 0,
+            "mass" : 200,
+            "xVel" : 0,
+            "yVel" : 0
+        },
+        {
+            "xPos" : 150,
+            "yPos" : 0,
+            "mass" : 8,
+            "xVel" : 0,
+            "yVel" : 16
+        },
+        {
+            "xPos" : -200,
+            "yPos" : 0,
+            "mass" : 0.8,
+            "xVel" : 3,
+            "yVel" : 16
+        },
+        {
+            "xPos" : 0,
+            "yPos" : -200,
+            "mass" : 4,
+            "xVel" : 10,
+            "yVel" : -3
+        },
+        {
+            "xPos" : -350,
+            "yPos" : 0,
+            "mass" : 3.5,
+            "xVel" : 0,
+            "yVel" : 12
+        }
+    ]
+}

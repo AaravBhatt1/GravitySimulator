@@ -9,7 +9,7 @@ gravityConstant = 160
 colorOptions = ["green", "blue", "yellow", "red", "purple", "orange", "white"]
 
 
-class Object(pygame.sprite.Sprite):
+class Planet(pygame.sprite.Sprite):
     def __init__(self, mass, color=None, x=0, y=0, xVel=0, yVel=0):
         super().__init__()
 
@@ -45,19 +45,19 @@ class Object(pygame.sprite.Sprite):
         self.xVel += self.xAcc
         self.yVel += self.yAcc
 
-    def adjustAcceleration(self, allObjects):
+    def adjustAcceleration(self, allPlanets):
         xForce = 0
         yForce = 0
 
-        for object in allObjects:
-            changeInX = object.rect.centerx - self.rect.centerx
-            changeInY = object.rect.centery - self.rect.centery
+        for planet in allPlanets:
+            changeInX = planet.rect.centerx - self.rect.centerx
+            changeInY = planet.rect.centery - self.rect.centery
             distance = (changeInX**2 + changeInY**2) ** 0.5  # This uses Pythagoras
             if distance == 0:
                 continue  # Cannot divide by 0 or arctan 0/0
             angle = math.atan2(changeInY, changeInX)
 
-            forceMagnitude = (gravityConstant * self.mass * object.mass) / (
+            forceMagnitude = (gravityConstant * self.mass * planet.mass) / (
                 distance**2
             )  # Newton's gravity formula
             # Converts the magnitude into a vector
