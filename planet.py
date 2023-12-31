@@ -14,7 +14,7 @@ class Planet(pygame.sprite.Sprite):
         self.mass = mass
         self.radius = (
             mass ** (1 / 3) * densityConstant
-        )  # Mass is proportional to density
+        )  # Assuming density is constant everywhere, the mass would be proportional to the radius cubed
 
         # Create the circular image surface
         self.image = pygame.Surface((self.radius * 2, self.radius * 2), pygame.SRCALPHA)
